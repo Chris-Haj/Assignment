@@ -33,7 +33,7 @@ with open(districtPath, 'r') as file:
         if line[-1] == '\n':
             line = line[:-1]
         number, district = line.split(' ', 1)
-        number = number
+        number = int(number)
         districts[district] = number
 
 parties = {}
@@ -88,6 +88,7 @@ def lesValg(year, file, ledger=None):
 
 v13 = lesValg(2013, 'Files/stemmer2013.txt')
 v13og17 = lesValg(2017, 'Files/stemmer2017.txt', v13)
+v21 = lesValg(2021, 'Files/stemmer2021.txt')
 
 
 def stemmerTotalt(ledger):
@@ -123,20 +124,56 @@ def valgresultat(year, district, party):
 
 
 def kretsÅr(district, year):
-    pass
+    if year in valg:
+        ledger = valg[year]
+    else:
+        return 'ukjent ar'
+    if district in districts:
+        district = districts[district]
+    else:
+        return 'ukjent krets'
 
+    partyVotes = {}
+    for party, districtVotes in ledger.items():
+        if district in districtVotes:
+            partyVotes[party] = districtVotes[district]
+
+    return partyVotes
+
+x = kretsÅr('Nordnes',2017)
 
 def samlet(year):
-    pass
+    if year in valg:
+        ledger = valg[year]
+    else:
+        return 'ukjent ar'
+    partyVotes= {}
+    for party, districtVotes in ledger.items():
+        totalVotes = 0
+        for votes in districtVotes.values():
+            totalVotes+= votes
+        partyVotes[party] = totalVotes
+    return partyVotes
+
 
 
 def prosentfordeling(year):
-    pass
+    if year in valg:
+        ledger = valg[year]
+    else:
+        return 'ukjent ar'
+    percentageDistribution = {}
+    totalVotes = stemmerTotalt(ledger)
+    partyVotes = samlet(year)
+    for party, districtVotes in ledger.items():
+        percentageDistribution[party] = partyVotes[party]/totalVotes
+    return percentageDistribution
 
+x = prosentfordeling(2021)
+print(x)
 
 def endring(start, end):
     pass
-
 
 def kretsOversikt():
     year, district = input('Please input a year and a district')
