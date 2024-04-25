@@ -173,7 +173,13 @@ x = prosentfordeling(2021)
 print(x)
 
 def endring(start, end):
-    pass
+    if start not in valg or end not in valg:
+        return 'ukjent ar'
+    startLedgerPerc = prosentfordeling(start)
+    endLedgerPerc = prosentfordeling(end)
+
+
+
 
 def kretsOversikt():
     year, district = input('Please input a year and a district')
